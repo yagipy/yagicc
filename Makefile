@@ -8,4 +8,7 @@ test: tinyc
 clean:
 	rm -f tinyc out*
 
-.PHONY: test clean
+format:
+	clang-format -i *.c
+
+.PHONY: test clean format
