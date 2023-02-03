@@ -1,4 +1,5 @@
 # tinyc
+tinyc is a tiny C compiler.
 
 ## Build
 ```shell
