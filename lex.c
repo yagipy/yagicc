@@ -11,7 +11,7 @@ Token *new_token(TokenKind kind, Token *cur, char *str, int len) {
   return tok;
 }
 
-Token *tokenize(char *p) {
+void tokenize(char *p) {
   Token head;
   head.next = NULL;
   Token *cur = &head;
@@ -29,7 +29,7 @@ Token *tokenize(char *p) {
       continue;
     }
 
-    if (strchr("+-*/()<>", *p)) {
+    if (ispunct(*p)) {
       cur = new_token(TK_RESERVED, cur, p++, 1);
       continue;
     }
@@ -42,9 +42,14 @@ Token *tokenize(char *p) {
       continue;
     }
 
+    if ('a' <= *p && *p <= 'z') {
+      cur = new_token(TK_IDENT, cur, p++, 1);
+      continue;
+    }
+
     error_at(token->str, "invalid token");
   }
 
   new_token(TK_EOF, cur, p, 0);
-  return head.next;
+  token = head.next;
 }

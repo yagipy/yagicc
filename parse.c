@@ -1,5 +1,7 @@
 #include "tinyc.h"
 
+Node *code[100];
+
 bool consume(char *op) {
   if (token->kind != TK_RESERVED || strlen(op) != token->len ||
       memcmp(token->str, op, token->len))
@@ -8,10 +10,24 @@ bool consume(char *op) {
   return true;
 }
 
+bool consume_number() {
+  if (token->kind != TK_NUM)
+    return false;
+  token = token->next;
+  return true;
+}
+
+bool consume_ident() {
+  if (token->kind != TK_IDENT)
+    return false;
+  token = token->next;
+  return true;
+}
+
 void expect(char *op) {
   if (token->kind != TK_RESERVED || strlen(op) != token->len ||
       memcmp(token->str, op, token->len))
-    error_at(token->str, "not found '%c'", op);
+    error_at(token->str, "not found '%s'", op);
   token = token->next;
 }
 
@@ -42,6 +58,25 @@ Node *new_num(int val) {
   return node;
 }
 
+Node *new_assign(Node *lhs, Node *rhs) {
+  Node *node = new_node(ND_ASSIGN);
+  node->lhs = lhs;
+  node->rhs = rhs;
+  return node;
+}
+
+Node *new_var(int offset) {
+  Node *node = new_node(ND_LVAR);
+  node->offset = offset;
+  return node;
+}
+
+bool at_eof() { return token->kind == TK_EOF; }
+
+void program();
+Node *stmt();
+Node *expr();
+Node *assign();
 Node *equality();
 Node *relational();
 Node *add();
@@ -49,7 +84,30 @@ Node *mul();
 Node *primary();
 Node *unary();
 
-Node *expr() { return equality(); }
+void parse() { program(); }
+
+void program() {
+  int i = 0;
+  while (!at_eof())
+    code[i++] = stmt();
+  code[i] = NULL;
+}
+
+Node *stmt() {
+  Node *node = expr();
+  expect(";");
+  return node;
+}
+
+Node *expr() { return assign(); }
+
+Node *assign() {
+  Node *node = equality();
+  if (consume("=")) {
+    node = new_assign(node, assign());
+  }
+  return node;
+}
 
 Node *equality() {
   Node *node = relational();
@@ -114,7 +172,17 @@ Node *primary() {
     return node;
   }
 
-  return new_num(expect_number());
+  if (token->kind == TK_NUM) {
+    return new_num(expect_number());
+  }
+
+  if (token->kind == TK_IDENT) {
+    token = token->next;
+    int offset = (token->str[0] - 'a' + 1) * 8;
+    return new_var(offset);
+  }
+
+  fprintf(stderr, "expected an expr");
 }
 
 Node *unary() {

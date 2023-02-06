@@ -23,16 +23,24 @@ int main(int argc, int **argv) {
   }
 
   user_input = argv[1];
-  token = tokenize(user_input);
-  Node *node = expr();
+  tokenize(user_input);
+  parse();
 
   printf(".intel_syntax noprefix\n");
   printf(".global main\n");
   printf("main:\n");
 
-  gen(node);
+  printf("  push rbp\n");
+  printf("  mov rbp, rsp\n");
+  printf("  sub rsp, 208\n"); // 208 = var(8) * alphabet(26)
 
-  printf("  pop rax\n");
+  for (int i = 0; code[i]; i++) {
+    gen(code[i]);
+    printf("  pop rax\n");
+  }
+
+  printf("  mov rsp, rbp\n");
+  printf("  pop rbp\n");
   printf("  ret\n");
   return 0;
 }
