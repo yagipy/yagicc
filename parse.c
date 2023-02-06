@@ -177,8 +177,8 @@ Node *primary() {
   }
 
   if (token->kind == TK_IDENT) {
-    token = token->next;
     int offset = (token->str[0] - 'a' + 1) * 8;
+    token = token->next;
     return new_var(offset);
   }
 
