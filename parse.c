@@ -102,7 +102,14 @@ void program() {
 }
 
 Node *stmt() {
-  Node *node = expr();
+  Node *node;
+  if (token->kind == TK_RETURN) {
+    node = new_node(ND_RETURN);
+    token = token->next;
+    node->lhs = expr();
+  } else {
+    node = expr();
+  }
   expect(";");
   return node;
 }
@@ -206,7 +213,7 @@ Node *primary() {
     return node;
   }
 
-  fprintf(stderr, "expected an expr");
+  fprintf(stderr, "expected an expr. kind: %u\n", token->kind);
 }
 
 Node *unary() {

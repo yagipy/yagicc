@@ -48,6 +48,12 @@ void tokenize(char *p) {
       continue;
     }
 
+    if (strncmp(p, "return", 6) == 0 && !is_ident(p[6])) {
+      cur = new_token(TK_RETURN, cur, p, 6);
+      p += 6;
+      continue;
+    }
+
     if (is_initial_ident(*p)) {
       char *ident = p;
       int count = 0;
