@@ -39,6 +39,14 @@ int expect_number() {
   return val;
 }
 
+LVar *find_lvar(Token *tok) {
+  for (LVar *var = locals; var; var = var->next) {
+    if (var->len == tok->len && !memcmp(tok->str, var->name, var->len))
+      return var;
+  }
+  return NULL;
+}
+
 Node *new_node(NodeKind kind) {
   Node *node = calloc(1, sizeof(Node));
   node->kind = kind;
@@ -177,9 +185,25 @@ Node *primary() {
   }
 
   if (token->kind == TK_IDENT) {
-    int offset = (token->str[0] - 'a' + 1) * 8;
+    Node *node = new_node(ND_LVAR);
+    LVar *var = find_lvar(token);
+    if (var) {
+      node->offset = var->offset;
+    } else {
+      LVar *var = calloc(1, sizeof(LVar));
+      var->next = locals;
+      var->name = token->str;
+      var->len = token->len;
+      if (!locals) {
+        var->offset = 8;
+      } else {
+        var->offset = locals->offset + 8;
+      }
+      node->offset = var->offset;
+      locals = var;
+    }
     token = token->next;
-    return new_var(offset);
+    return node;
   }
 
   fprintf(stderr, "expected an expr");

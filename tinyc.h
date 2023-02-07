@@ -44,9 +44,18 @@ struct Node {
   int offset; // use only kind=ND_LVAR
 };
 
+typedef struct LVar LVar;
+struct LVar {
+  LVar *next; // next var or null
+  char *name; // var name
+  int len;    // name length
+  int offset; // offset from rbp
+};
+
 extern char *user_input;
 extern Token *token;
 extern Node *code[100];
+extern LVar *locals;
 
 void tokenize(char *p);
 void parse();

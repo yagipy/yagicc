@@ -2,6 +2,7 @@
 
 char *user_input;
 Token *token;
+LVar *locals;
 
 void error_at(char *loc, char *fmt, ...) {
   va_list ap;

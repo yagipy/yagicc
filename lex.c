@@ -2,6 +2,12 @@
 
 bool startswith(char *p, char *q) { return memcmp(p, q, strlen(q)) == 0; }
 
+bool is_initial_ident(char c) {
+  return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || c == '_';
+}
+
+bool is_ident(char c) { return is_initial_ident(c) || ('0' <= c && c <= '9'); }
+
 Token *new_token(TokenKind kind, Token *cur, char *str, int len) {
   Token *tok = calloc(1, sizeof(Token));
   tok->kind = kind;
@@ -42,8 +48,14 @@ void tokenize(char *p) {
       continue;
     }
 
-    if ('a' <= *p && *p <= 'z') {
-      cur = new_token(TK_IDENT, cur, p++, 1);
+    if (is_initial_ident(*p)) {
+      char *ident = p;
+      int count = 0;
+      do {
+        p++;
+        count++;
+      } while (is_ident(*p));
+      cur = new_token(TK_IDENT, cur, ident, count);
       continue;
     }
 
