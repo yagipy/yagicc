@@ -2,6 +2,7 @@
 
 char *user_input;
 Token *token;
+Node *code[100];
 LVar *locals;
 
 void error_at(char *loc, char *fmt, ...) {
@@ -26,22 +27,6 @@ int main(int argc, int **argv) {
   user_input = argv[1];
   tokenize(user_input);
   parse();
-
-  printf(".intel_syntax noprefix\n");
-  printf(".global main\n");
-  printf("main:\n");
-
-  printf("  push rbp\n");
-  printf("  mov rbp, rsp\n");
-  printf("  sub rsp, 208\n"); // 208 = var(8) * alphabet(26)
-
-  for (int i = 0; code[i]; i++) {
-    gen(code[i]);
-    printf("  pop rax\n");
-  }
-
-  printf("  mov rsp, rbp\n");
-  printf("  pop rbp\n");
-  printf("  ret\n");
+  gen();
   return 0;
 }

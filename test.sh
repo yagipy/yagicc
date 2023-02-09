@@ -19,14 +19,14 @@ assert() {
 
 assert 0 'return 0;'
 assert 42 'return 42;'
-assert 21 "return 5+20-4;"
-assert 41 "return  12 + 34 - 5 ;"
-assert 47 "return 5+6*7;"
-assert 15 "return 5*(9-6);"
-assert 4 "return (3+5)/2;"
-assert 10 "return -10+20;"
-assert 10 "return - -10;"
-assert 10 "return - - +10;"
+assert 21 'return 5+20-4;'
+assert 41 'return  12 + 34 - 5 ;'
+assert 47 'return 5+6*7;'
+assert 15 'return 5*(9-6);'
+assert 4 'return (3+5)/2;'
+assert 10 'return -10+20;'
+assert 10 'return - -10;'
+assert 10 'return - - +10;'
 
 assert 0 'return 0==1;'
 assert 1 'return 42==42;'

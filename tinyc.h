@@ -61,6 +61,6 @@ extern LVar *locals;
 
 void tokenize(char *p);
 void parse();
-void gen(Node *node);
+void gen();
 
 void error_at(char *loc, char *fmt, ...);

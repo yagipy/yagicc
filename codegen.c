@@ -1,5 +1,11 @@
 #include "tinyc.h"
 
+void gen_epilogue() {
+  printf("  mov rsp, rbp\n");
+  printf("  pop rbp\n");
+  printf("  ret\n");
+}
+
 void gen_lval(Node *node) {
   if (node->kind != ND_LVAR)
     fprintf(stderr, "lvalue is not a var");
@@ -9,7 +15,7 @@ void gen_lval(Node *node) {
   printf("  push rax\n");
 }
 
-void gen(Node *node) {
+void gen_node(Node *node) {
   switch (node->kind) {
   case ND_NUM:
     printf("  push %d\n", node->val);
@@ -22,7 +28,7 @@ void gen(Node *node) {
     return;
   case ND_ASSIGN:
     gen_lval(node->lhs);
-    gen(node->rhs);
+    gen_node(node->rhs);
 
     printf("  pop rdi\n");
     printf("  pop rax\n");
@@ -30,16 +36,14 @@ void gen(Node *node) {
     printf("  push rdi\n");
     return;
   case ND_RETURN:
-    gen(node->lhs);
+    gen_node(node->lhs);
     printf("  pop rax\n");
-    printf("  mov rsp, rbp\n");
-    printf("  pop rbp\n");
-    printf("  ret\n");
+    gen_epilogue();
     return;
   }
 
-  gen(node->lhs);
-  gen(node->rhs);
+  gen_node(node->lhs);
+  gen_node(node->rhs);
 
   printf("  pop rdi\n");
   printf("  pop rax\n");
@@ -81,4 +85,21 @@ void gen(Node *node) {
   }
 
   printf("  push rax\n");
+}
+
+void gen() {
+  printf(".intel_syntax noprefix\n");
+  printf(".global main\n");
+  printf("main:\n");
+
+  printf("  push rbp\n");
+  printf("  mov rbp, rsp\n");
+  printf("  sub rsp, 208\n"); // 208 = var(8) * alphabet(26)
+
+  for (int i = 0; code[i]; i++) {
+    gen_node(code[i]);
+    printf("  pop rax\n");
+  }
+
+  gen_epilogue();
 }

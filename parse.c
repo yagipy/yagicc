@@ -1,7 +1,5 @@
 #include "tinyc.h"
 
-Node *code[100];
-
 bool consume(char *op) {
   if (token->kind != TK_RESERVED || strlen(op) != token->len ||
       memcmp(token->str, op, token->len))
