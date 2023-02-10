@@ -40,6 +40,23 @@ void gen_node(Node *node) {
     printf("  pop rax\n");
     gen_epilogue();
     return;
+  case ND_IF:
+    gen_node(node->cond);
+    printf(" pop rax\n");
+    printf(" cmp rax, 0\n");
+    if (node->else_block == NULL) {
+      printf("  je .Lend\n");
+      gen_node(node->block);
+      printf(".Lend:\n");
+    } else {
+      printf("  je .Lelse\n");
+      gen_node(node->block);
+      printf("  jmp .Lend\n");
+      printf(".Lelse:\n");
+      gen_node(node->else_block);
+      printf(".Lend:\n");
+    }
+    return;
   }
 
   gen_node(node->lhs);

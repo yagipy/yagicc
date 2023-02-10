@@ -58,4 +58,7 @@ assert 1 'return 1; 2; 3;'
 assert 2 '1; return 2; 3;'
 assert 3 '1; 2; return 3;'
 
+assert 10 'if (1>=1) return 10;'
+assert 15 'if (1>=2) return 10; else return 15;'
+
 echo OK

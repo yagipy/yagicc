@@ -11,6 +11,7 @@ typedef enum {
   TK_NUM,      // Number
   TK_EOF,      // Enf Of File
   TK_RETURN,   // return
+  TK_IF,       // if
 } TokenKind;
 
 typedef struct Token Token;
@@ -35,6 +36,7 @@ typedef enum {
   ND_ASSIGN, // =
   ND_LVAR,   // Local variant
   ND_RETURN, // return
+  ND_IF,     // if
 } NodeKind;
 
 typedef struct Node Node;
@@ -44,6 +46,9 @@ struct Node {
   Node *rhs;  // right
   int val;    // use only kind=ND_NUM
   int offset; // use only kind=ND_LVAR
+  Node *cond;
+  Node *block;
+  Node *else_block;
 };
 
 typedef struct LVar LVar;

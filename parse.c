@@ -105,10 +105,21 @@ Node *stmt() {
     node = new_node(ND_RETURN);
     token = token->next;
     node->lhs = expr();
+    expect(";");
+  } else if (token->kind == TK_IF) {
+    node = new_node(ND_IF);
+    token = token->next;
+    expect("(");
+    node->cond = expr();
+    expect(")");
+    node->block = stmt();
+    if (consume("else")) {
+      node->else_block = stmt();
+    }
   } else {
     node = expr();
+    expect(";");
   }
-  expect(";");
   return node;
 }
 

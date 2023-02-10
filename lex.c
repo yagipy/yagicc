@@ -34,6 +34,11 @@ void tokenize(char *p) {
       p += 2;
       continue;
     }
+    if (startswith(p, "else")) {
+      cur = new_token(TK_RESERVED, cur, p, 4);
+      p += 4;
+      continue;
+    }
 
     if (ispunct(*p)) {
       cur = new_token(TK_RESERVED, cur, p++, 1);
@@ -51,6 +56,12 @@ void tokenize(char *p) {
     if (strncmp(p, "return", 6) == 0 && !is_ident(p[6])) {
       cur = new_token(TK_RETURN, cur, p, 6);
       p += 6;
+      continue;
+    }
+
+    if (strncmp(p, "if", 2) == 0 && !is_ident(p[2])) {
+      cur = new_token(TK_IF, cur, p, 2);
+      p += 2;
       continue;
     }
 
