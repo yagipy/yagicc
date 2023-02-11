@@ -65,6 +65,12 @@ void tokenize(char *p) {
       continue;
     }
 
+    if (strncmp(p, "for", 3) == 0 && !is_ident(p[3])) {
+      cur = new_token(TK_FOR, cur, p, 3);
+      p += 3;
+      continue;
+    }
+
     if (is_initial_ident(*p)) {
       char *ident = p;
       int count = 0;

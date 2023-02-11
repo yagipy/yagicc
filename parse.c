@@ -116,6 +116,23 @@ Node *stmt() {
     if (consume("else")) {
       node->else_block = stmt();
     }
+  } else if (token->kind == TK_FOR) {
+    node = new_node(ND_FOR);
+    token = token->next;
+    expect("(");
+    if (!consume(";")) {
+      node->init = expr();
+      expect(";");
+    }
+    if (!consume(";")) {
+      node->cond = expr();
+      expect(";");
+    }
+    if (!consume(")")) {
+      node->change = expr();
+      expect(")");
+    }
+    node->block = stmt();
   } else {
     node = expr();
     expect(";");
