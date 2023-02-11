@@ -75,6 +75,16 @@ void gen_node(Node *node) {
     printf("  jmp .Lbegin\n");
     printf(".Lend:\n");
     return;
+  case ND_WHILE:
+    printf(".Lbegin:\n");
+    gen_node(node->cond);
+    printf("  pop rax\n");
+    printf("  cmp rax, 0\n");
+    printf("  je .Lend\n");
+    gen_node(node->block);
+    printf("  jmp .Lbegin\n");
+    printf(".Lend:\n");
+    return;
   }
 
   gen_node(node->lhs);

@@ -133,6 +133,13 @@ Node *stmt() {
       expect(")");
     }
     node->block = stmt();
+  } else if (token->kind == TK_WHILE) {
+    node = new_node(ND_WHILE);
+    token = token->next;
+    expect("(");
+    node->cond = expr();
+    expect(")");
+    node->block = stmt();
   } else {
     node = expr();
     expect(";");

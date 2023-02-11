@@ -13,6 +13,7 @@ typedef enum {
   TK_RETURN,   // return
   TK_IF,       // if
   TK_FOR,      // for
+  TK_WHILE,    // while
 } TokenKind;
 
 typedef struct Token Token;
@@ -39,6 +40,7 @@ typedef enum {
   ND_RETURN, // return
   ND_IF,     // if
   ND_FOR,    // for
+  ND_WHILE,  // while
 } NodeKind;
 
 typedef struct Node Node;
