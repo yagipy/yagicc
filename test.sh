@@ -68,4 +68,8 @@ assert 10 'while (1>=1) return 10; return 15;'
 assert 15 'while (1>=2) return 10; return 15;'
 assert 10 'i=0; while(i<10) i=i+1; return i;'
 
+assert 8 'if (1>=2) { a=1; b=2; return a+b; } else { a=3; z=5; return a+z; }'
+assert 3 'for (;;) { a=1; b=2; return a+b; } return 5;'
+assert 10 'while (1>=1) { a=5; b=5; return a+b; } return 15;'
+
 echo OK

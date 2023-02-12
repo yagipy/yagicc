@@ -140,6 +140,19 @@ Node *stmt() {
     node->cond = expr();
     expect(")");
     node->block = stmt();
+  } else if (consume("{")) {
+    Node *head = new_node(ND_BLOCK);
+    head->body = NULL;
+    Node *cur = head;
+
+    cur->body = new_node(ND_BLOCK);
+    cur = cur->body;
+
+    while (!consume("}")) {
+      cur->body = stmt();
+      cur = cur->body;
+    }
+    node = head->body;
   } else {
     node = expr();
     expect(";");

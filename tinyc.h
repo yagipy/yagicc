@@ -41,6 +41,7 @@ typedef enum {
   ND_IF,     // if
   ND_FOR,    // for
   ND_WHILE,  // while
+  ND_BLOCK,  // block
 } NodeKind;
 
 typedef struct Node Node;
@@ -55,6 +56,7 @@ struct Node {
   Node *else_block; // use kind=ND_IF
   Node *init;       // use kind=ND_FOR
   Node *change;     // use kind=ND_FOR
+  Node *body;       // use kind=ND_BLOCK
 };
 
 typedef struct LVar LVar;
