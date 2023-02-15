@@ -42,6 +42,7 @@ typedef enum {
   ND_FOR,    // for
   ND_WHILE,  // while
   ND_BLOCK,  // block
+  ND_CALL,   // call function
 } NodeKind;
 
 typedef struct Node Node;
@@ -57,6 +58,8 @@ struct Node {
   Node *init;       // use kind=ND_FOR
   Node *change;     // use kind=ND_FOR
   Node *body;       // use kind=ND_BLOCK
+  char *caller;     // use kind=ND_CALL
+  int caller_len;   // use kind=ND_CALL
 };
 
 typedef struct LVar LVar;

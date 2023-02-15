@@ -91,6 +91,11 @@ void gen_node(Node *node) {
       printf("  pop rax\n");
     }
     return;
+  case ND_CALL:
+    char *caller = calloc(1, sizeof(node->caller_len));
+    strncpy(caller, node->caller, node->caller_len);
+    printf("  call %s\n", caller);
+    return;
   }
 
   gen_node(node->lhs);

@@ -238,25 +238,36 @@ Node *primary() {
   }
 
   if (token->kind == TK_IDENT) {
-    Node *node = new_node(ND_LVAR);
-    LVar *var = find_lvar(token);
-    if (var) {
-      node->offset = var->offset;
+    if (token->next->kind == TK_RESERVED && strlen("(") == token->next->len &&
+        memcmp(token->next->str, "(", token->next->len) == 0) {
+      Node *node = new_node(ND_CALL);
+      node->caller = token->str;
+      node->caller_len = token->len;
+      token = token->next;
+      expect("(");
+      expect(")");
+      return node;
     } else {
-      LVar *var = calloc(1, sizeof(LVar));
-      var->next = locals;
-      var->name = token->str;
-      var->len = token->len;
-      if (!locals) {
-        var->offset = 8;
+      Node *node = new_node(ND_LVAR);
+      LVar *var = find_lvar(token);
+      if (var) {
+        node->offset = var->offset;
       } else {
-        var->offset = locals->offset + 8;
+        LVar *var = calloc(1, sizeof(LVar));
+        var->next = locals;
+        var->name = token->str;
+        var->len = token->len;
+        if (!locals) {
+          var->offset = 8;
+        } else {
+          var->offset = locals->offset + 8;
+        }
+        node->offset = var->offset;
+        locals = var;
       }
-      node->offset = var->offset;
-      locals = var;
+      token = token->next;
+      return node;
     }
-    token = token->next;
-    return node;
   }
 
   fprintf(stderr, "expected an expr. kind: %u\n", token->kind);
