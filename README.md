@@ -1,5 +1,10 @@
-# tinyc
-tinyc is a tiny C compiler.
+# yagicc
+yagicc is a tiny C compiler.
+
+```shell
+docker build -q .
+docker run --rm -it -v $PWD:/yagicc <ID> bash
+```
 
 ## Build
 ```shell

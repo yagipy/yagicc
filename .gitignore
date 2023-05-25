@@ -1,4 +1,4 @@
 .idea
-tinyc
+yagicc
 out*
 *.o

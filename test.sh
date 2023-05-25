@@ -4,7 +4,7 @@ assert() {
   expected="$1"
   input="$2"
 
-  ./tinyc "$input" > out.s
+  ./yagicc "$input" > out.s
   cc -o out out.s
   ./out
   actual="$?"

@@ -1,4 +1,4 @@
-#include "tinyc.h"
+#include "yagicc.h"
 
 void gen_epilogue() {
   printf("  mov rsp, rbp\n");

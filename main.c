@@ -1,4 +1,4 @@
-#include "tinyc.h"
+#include "yagicc.h"
 
 char *user_input;
 Token *token;

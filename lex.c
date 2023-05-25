@@ -1,4 +1,4 @@
-#include "tinyc.h"
+#include "yagicc.h"
 
 bool startswith(char *p, char *q) { return memcmp(p, q, strlen(q)) == 0; }
 

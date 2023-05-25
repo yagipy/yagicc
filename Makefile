@@ -2,16 +2,16 @@ CFLAGS=-std=c11 -g -static
 SRCS=$(wildcard *.c)
 OBJS=$(SRCS:.c=.o)
 
-tinyc: $(OBJS)
-	$(CC) -o tinyc $(OBJS) $(LDFLAGS)
+yagicc: $(OBJS)
+	$(CC) -o yagicc $(OBJS) $(LDFLAGS)
 
-$(OBJS): tinyc.h
+$(OBJS): yagicc.h
 
-test: tinyc
+test: yagicc
 	./test.sh
 
 clean:
-	rm -f tinyc out* *.o
+	rm -f yagicc out* *.o
 
 format:
 	clang-format -i *.c *.h

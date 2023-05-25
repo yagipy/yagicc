@@ -1,4 +1,4 @@
-#include "tinyc.h"
+#include "yagicc.h"
 
 bool consume(char *op) {
   if (token->kind != TK_RESERVED || strlen(op) != token->len ||
